@@ -14,13 +14,26 @@ void main() async {
   runApp(const MyApp());
 }
 
+Size get designSize {
+  // 获取设备的物理尺寸和像素比
+  final firstView = WidgetsBinding.instance.platformDispatcher.views.first;
+  // 计算设备的逻辑短边（实际可用宽度）
+  final logicalShortestSide = firstView.physicalSize.shortestSide / firstView.devicePixelRatio;
+
+  // 计算设备的逻辑长边（实际可用高度）
+  final logicalLongestSide = firstView.physicalSize.longestSide / firstView.devicePixelRatio;
+  // 使用0.95的缩放因子来稍微缩小参考尺寸
+  const scaleFactor = 0.95;
+  return Size(logicalShortestSide * scaleFactor, logicalLongestSide * scaleFactor);
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(375, 812),
+      designSize: designSize,
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
